@@ -28,40 +28,25 @@ const HomeScreen: FC = () => {
 
       {/* KITCHEN AREA */}
       <View style={styles.kitchenArea}>
-        {/* Top row: microwave + toaster */}
-        <View style={styles.applianceRow}>
-          <View style={styles.microwave}>
-            <View style={styles.microwaveScreen} />
-            <View style={styles.microwaveButtons} />
-          </View>
-
-          <View style={styles.toaster}>
-            <View style={styles.toasterTop} />
-            <View style={styles.toasterBody} />
-          </View>
-        </View>
-
         {/* Middle shelf */}
         <View style={styles.produce}>
           <Image 
             source={require("../assets/images/Milk.png")}
             style={styles.milkBottle}
           />
-
           <Image
             source={require("../assets/images/Carrot.png")}
             style={styles.carrot}
           />
-
-          <View style={styles.shelfItem}>
-            <View style={styles.herb} />
-          </View>
-
-          <View style={styles.shelfItem}>
-            <View style={styles.fishBody} />
-          </View>
+          <Image
+            source={require("../assets/images/Soy_sauce.png")}
+            style={styles.soySauce}
+          />
+          <Image
+            source={require("../assets/images/Egg.png")}
+            style={styles.egg}
+          />
         </View>
-
         {/* Cabinet base (just background block to mimic counter) */}
         <View style={styles.cabinetRow}>
           <View style={styles.cabinetLeft} />

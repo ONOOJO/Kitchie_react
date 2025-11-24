@@ -32,67 +32,6 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingTop: 16,
   },
-  applianceRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 18,
-  },
-  microwave: {
-    width: "56%",
-    height: 110,
-    backgroundColor: "#ffeedd",
-    borderRadius: 24,
-    padding: 14,
-    justifyContent: "space-between",
-  },
-  microwaveScreen: {
-    flex: 1,
-    backgroundColor: "#f7cdb4",
-    borderRadius: 16,
-  },
-  microwaveButtons: {
-    marginTop: 8,
-    height: 22,
-    backgroundColor: "#fbd7c3",
-    borderRadius: 10,
-  },
-  toaster: {
-    width: "38%",
-    alignItems: "center",
-    justifyContent: "flex-end",
-  },
-  toasterTop: {
-    width: "85%",
-    height: 28,
-    backgroundColor: "#f3aa9c",
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-  },
-  toasterBody: {
-    width: "90%",
-    height: 70,
-    backgroundColor: "#ffeedd",
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    marginTop: -4,
-  },
-
-  shelf: {
-    marginTop: 12,
-    backgroundColor: "#fff2e4",
-    borderRadius: 24,
-    paddingHorizontal: 18,
-    paddingVertical: 18,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  shelfItem: {
-    alignItems: "center",
-    justifyContent: "flex-end",
-    width: 60,
-  },
 
   // Current Grocery Items (View)
   produce: {
@@ -115,20 +54,18 @@ export const styles = StyleSheet.create({
     borderRadius: 14,
   },
 
-  // Herb
-  herb: {
+  // Soy Sauce
+  soySauce: {
     width: 36,
     height: 64,
     borderRadius: 24,
-    backgroundColor: "#a4d49a",
   },
 
-  // Fish
-  fishBody: {
+  // Egg
+  egg: {
     width: 50,
     height: 60,
     borderRadius: 30,
-    backgroundColor: "#c1bccf",
   },
 
   cabinetRow: {
@@ -141,7 +78,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   cabinetRight: {
-    width: 130,
+    width: 350,
     height: 90,
     backgroundColor: "#f9c9a1",
     borderRadius: 18,
