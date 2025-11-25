@@ -13,10 +13,11 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  logoText: {
-    fontSize: 42,
-    fontWeight: "700",
-    color: "#f5a39e",
+
+  // Logo Image
+  logoImage: {
+    height: 40,
+    width: 100,
   },
   headerIcons: {
     flexDirection: "row",
@@ -30,7 +31,9 @@ export const styles = StyleSheet.create({
   kitchenArea: {
     flex: 1,
     paddingHorizontal: 24,
-    paddingTop: 16,
+    paddingTop: 20,
+    justifyContent: "flex-end",
+    paddingBottom: 10,
   },
 
   // Current Grocery Items (View)
@@ -39,6 +42,11 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     gap: 12,
+    position: "absolute",
+    zIndex: 10, // Brings the ingredients forward
+    elevation: 10, // Android requires this?
+    left: 30,
+    bottom: 20,
   },
 
   // Milk bottle
@@ -78,7 +86,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   cabinetRight: {
-    width: 350,
+    width: "100%",
     height: 90,
     backgroundColor: "#f9c9a1",
     borderRadius: 18,
@@ -101,11 +109,11 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 28,
     paddingTop: 12,
-    backgroundColor: "#f7b7a3",
+    backgroundColor: "#f7b7a356",
   },
   tabBar: {
     flexDirection: "row",
-    height: 80,
+    height: 60,
     backgroundColor: "#b7747c",
     borderRadius: 40,
     alignItems: "center",
