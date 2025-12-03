@@ -3,11 +3,12 @@ import { useRouter } from "expo-router";
 import React, { FC, useState } from "react";
 import {
   FlatList,
+  Image,
   Modal,
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { styles } from "../../styles/stockscreen.styes";
 
@@ -18,11 +19,26 @@ type Ingredient = {
   unit?: string;
 };
 
+const ingredientImages: Record<string, any> = {
+  milk: require("../../assets/images/Milk.png"),
+  carrot: require("../../assets/images/Carrot.png"),
+  "soy sauce": require("../../assets/images/Soy_sauce.png"),
+  egg: require("../../assets/images/Egg.png"),
+};
+
+const defaultIngredientImage = require("../../assets/images/default.png"); // optional
+
+const getIngredientImage = (name: string) => {
+  const key = name.trim().toLowerCase();
+  return ingredientImages[key] || defaultIngredientImage;
+};
+
+
 const initialData: Ingredient[] = [
-  { id: "1", name: "Milk", quantity: "2", unit: "bottles" },
-  { id: "2", name: "Carrot", quantity: "5", unit: "pcs" },
-  { id: "3", name: "Soy Sauce", quantity: "1", unit: "bottle" },
-  { id: "4", name: "Egg", quantity: "12", unit: "pcs" },
+  { id: "1", name: "Milk", quantity: "2", unit: "x" },
+  { id: "2", name: "Carrot", quantity: "5", unit: "x" },
+  { id: "3", name: "Soy Sauce", quantity: "1", unit: "x" },
+  { id: "4", name: "Egg", quantity: "12", unit: "x" },
 ];
 
 const StockScreen: FC = () => {
@@ -67,21 +83,30 @@ const StockScreen: FC = () => {
     closeEdit();
   };
 
-  const renderItem = ({ item }: { item: Ingredient }) => (
+const renderItem = ({ item }: { item: Ingredient }) => {
+  const imageSource = getIngredientImage(item.name);
+
+  return (
     <TouchableOpacity
       style={styles.itemCard}
       activeOpacity={0.8}
       onPress={() => openEdit(item)}
     >
-      <View style={styles.itemLeft}>
-        <Text style={styles.itemName}>{item.name}</Text>
-        <Text style={styles.itemSub}>
-          {item.quantity} {item.unit}
-        </Text>
+      <View style={styles.itemLeftRow}>
+        <Image source={imageSource} style={styles.itemImage} />
+        <View style={styles.itemRightText}>
+          <Text style={styles.itemSub}>
+            {item.quantity} {item.unit}
+          </Text>
+        </View>
       </View>
-      <Feather name="edit-3" size={20} color="#f29f9b" />
+
+      {/* <Feather name="edit-3" size={20} color="#f29f9b" /> */}
     </TouchableOpacity>
   );
+};
+
+
 
   return (
     <View style={styles.safeArea}>
@@ -105,14 +130,15 @@ const StockScreen: FC = () => {
         </Text>
 
         {/* LIST */}
-        <View style={styles.listWrapper}>
-          <FlatList
-            data={ingredients}
-            keyExtractor={(item) => item.id}
-            renderItem={renderItem}
-            contentContainerStyle={styles.listContent}
-          />
-        </View>
+        <FlatList
+          data={ingredients}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          numColumns={4} // 4 items per row
+          columnWrapperStyle={styles.row} // style for each row
+          contentContainerStyle={styles.listContent}
+        />
+
 
         {/* EDIT MODAL */}
         <Modal
@@ -142,15 +168,6 @@ const StockScreen: FC = () => {
                 placeholder="Amount"
                 placeholderTextColor="#cfa9a5"
                 keyboardType="numeric"
-              />
-
-              <Text style={styles.modalLabel}>Unit</Text>
-              <TextInput
-                value={editUnit}
-                onChangeText={setEditUnit}
-                style={styles.input}
-                placeholder="e.g. pcs, bottle, bag"
-                placeholderTextColor="#cfa9a5"
               />
 
               <View style={styles.modalButtonsRow}>

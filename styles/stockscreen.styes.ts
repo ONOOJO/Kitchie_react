@@ -39,33 +39,47 @@ export const styles = StyleSheet.create({
     color: "#b7867c",
     marginBottom: 12,
   },
-  listWrapper: {
-    flex: 1,
-    borderRadius: 24,
-    backgroundColor: "#fff7f1",
-    paddingVertical: 8,
-    paddingHorizontal: 6,
+
+  // Grid List Wrapper
+  gridList: {
+    flexDirection: "row",
   },
+
+  row: {
+  flex: 1,
+  justifyContent: "space-between",
+  marginBottom: 8,
+},
+
+  // Ingredient List
   listContent: {
     paddingVertical: 4,
   },
   itemCard: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 12,
-    paddingHorizontal: 12,
-    backgroundColor: "#ffe6d5",
-    borderRadius: 18,
+    paddingHorizontal: 2,
+    backgroundColor: "#ffd5aeff",
+    borderRadius: 25,
     marginBottom: 8,
+    marginHorizontal: 4,
     justifyContent: "space-between",
   },
-  itemLeft: {
-    flexDirection: "column",
+  itemLeftRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexShrink: 1,
   },
-  itemName: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#f16f5c",
+  itemImage: {
+    width: 32,
+    height: 32,
+    borderRadius: 8,
+    marginRight: 8,
+  },
+  itemRightText: {
+    flexDirection: "column",
   },
   itemSub: {
     fontSize: 13,
