@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffe7d8",
   },
   headerRow: {
     paddingHorizontal: 24,
@@ -27,6 +26,12 @@ export const styles = StyleSheet.create({
     padding: 6,
   },
 
+  // Background Image
+  background_home: {
+    flex: 1,
+    width: "100%",
+  },
+
   // Kitchen
   kitchenArea: {
     flex: 1,
@@ -41,7 +46,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
-    gap: 12,
+    gap: 2,
     position: "absolute",
     zIndex: 10, // Brings the ingredients forward
     elevation: 10, // Android requires this?
@@ -104,29 +109,5 @@ export const styles = StyleSheet.create({
     backgroundColor: "#f7b58e",
   },
 
-  // Bottom tabs
-  tabBarWrapper: {
-    paddingHorizontal: 16,
-    paddingBottom: 28,
-    paddingTop: 12,
-    backgroundColor: "#f7b7a356",
-  },
-  tabBar: {
-    flexDirection: "row",
-    height: 60,
-    backgroundColor: "#b7747c",
-    borderRadius: 40,
-    alignItems: "center",
-    justifyContent: "space-around",
-  },
-  tabButton: {
-    width: 54,
-    height: 54,
-    borderRadius: 27,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  tabButtonActive: {
-    backgroundColor: "rgba(255, 233, 220, 0.25)",
-  },
 });
+
