@@ -50,22 +50,54 @@ const StockScreen: FC = () => {
   const [editName, setEditName] = useState("");
   const [editQuantity, setEditQuantity] = useState("");
   const [editUnit, setEditUnit] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
 
   const openEdit = (item: Ingredient) => {
     setSelectedItem(item);
     setEditName(item.name);
     setEditQuantity(item.quantity);
     setEditUnit(item.unit || "");
+    setModalVisible(true);
   };
 
   const closeEdit = () => {
+    setModalVisible(false);
     setSelectedItem(null);
     setEditName("");
     setEditQuantity("");
     setEditUnit("");
   };
 
-  const saveEdit = () => {
+  const openAdd = () => {
+  setSelectedItem(null);        // important: means ADD mode
+  setEditName("");
+  setEditQuantity("");
+  setEditUnit("x");             // default unit if you want
+  setModalVisible(true);
+};
+
+const isEditMode = !!selectedItem;
+
+
+const addIngredient = () => {   // Add new ingredients
+  const name = editName.trim();
+  const qty = editQuantity.trim();
+
+  if (!name || !qty) return;
+
+  const newItem: Ingredient = {
+    id: Date.now().toString(),
+    name,
+    quantity: qty,
+    unit: editUnit.trim() || "x",
+  };
+
+  setIngredients((prev) => [...prev, newItem]);
+  closeEdit();
+};
+
+
+  const saveEdit = () => {      // Edit existing ingredients
     if (!selectedItem) return;
 
     setIngredients((prev) =>
@@ -83,6 +115,13 @@ const StockScreen: FC = () => {
 
     closeEdit();
   };
+
+  const deleteIngredient = () => {  // Delete existing ingredients
+  if (!selectedItem) return;
+
+  setIngredients((prev) => prev.filter((ing) => ing.id !== selectedItem.id));
+  closeEdit();
+};
 
 const renderItem = ({ item }: { item: Ingredient }) => {
   const imageSource = getIngredientImage(item.name);
@@ -119,7 +158,7 @@ const renderItem = ({ item }: { item: Ingredient }) => {
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Inventory</Text>
           <View style={styles.headerRight}>
-            <TouchableOpacity style={styles.iconButton}>
+            <TouchableOpacity onPress= {openAdd} style={styles.iconButton}>
               <Feather name="plus" size={22} color="#f29f9b" />
             </TouchableOpacity>
           </View>
@@ -143,14 +182,14 @@ const renderItem = ({ item }: { item: Ingredient }) => {
 
         {/* EDIT MODAL */}
         <Modal
-          visible={!!selectedItem}
+          visible={modalVisible}
           transparent
           animationType="fade"
           onRequestClose={closeEdit}
         >
           <View style={styles.modalOverlay}>
             <View style={styles.modalCard}>
-              <Text style={styles.modalTitle}>Edit Ingredient</Text>
+              <Text style={styles.modalTitle}> {isEditMode ? "Edit Ingredient" : "Add Ingredient"}</Text>
 
               <Text style={styles.modalLabel}>Name</Text>
               <TextInput
@@ -171,20 +210,34 @@ const renderItem = ({ item }: { item: Ingredient }) => {
                 keyboardType="numeric"
               />
 
-              <View style={styles.modalButtonsRow}>
-                <TouchableOpacity
-                  style={[styles.modalButton, styles.modalButtonSecondary]}
-                  onPress={closeEdit}
-                >
-                  <Text style={styles.modalButtonSecondaryText}>Cancel</Text>
-                </TouchableOpacity>
+              {/* LEFT: Delete */}
+              <View style={styles.modalButtonsRow}> 
+                {isEditMode && (
+                    <TouchableOpacity
+                      style={[styles.modalButton, styles.modalButtonDanger]}
+                      onPress={deleteIngredient}
+                    >
+                      <Text style={styles.modalButtonDangerText}>Delete</Text>
+                    </TouchableOpacity>
+                  )}
+                  {/* RIGHT: Cancel + Save */}
+                  <View style={styles.modalButtonsRight}>  
+                    <TouchableOpacity
+                      style={[styles.modalButton, styles.modalButtonSecondary]}
+                      onPress={closeEdit}
+                    >
+                      <Text style={styles.modalButtonSecondaryText}>Cancel</Text>
+                    </TouchableOpacity>
 
-                <TouchableOpacity
-                  style={[styles.modalButton, styles.modalButtonPrimary]}
-                  onPress={saveEdit}
-                >
-                  <Text style={styles.modalButtonPrimaryText}>Save</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.modalButton, styles.modalButtonPrimary]}
+                      onPress={isEditMode ? saveEdit : addIngredient}
+                    >
+                      <Text style={styles.modalButtonPrimaryText}>
+                        {isEditMode ? "Save" : "Add"}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
               </View>
             </View>
           </View>

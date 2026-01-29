@@ -121,9 +121,13 @@ export const styles = StyleSheet.create({
   },
   modalButtonsRow: {
     flexDirection: "row",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     marginTop: 18,
-    gap: 10,
+    alignItems: "center",
+  },
+  modalButtonsRight: {
+    flexDirection: "row",
+    gap: 10, // or marginRight on buttons if you prefer
   },
   modalButton: {
     paddingHorizontal: 16,
@@ -143,5 +147,12 @@ export const styles = StyleSheet.create({
   modalButtonPrimaryText: {
     color: "#ffe9dc",
     fontWeight: "700",
+  },
+  modalButtonDanger: {
+  backgroundColor: "#ff6b6b",
+  },
+  modalButtonDangerText: {
+  color: "#fff",
+  fontWeight: "600",
   },
 });
