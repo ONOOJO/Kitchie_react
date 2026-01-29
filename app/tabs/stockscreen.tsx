@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from "../../styles/stockscreen.styes";
 
 type Ingredient = {
@@ -109,7 +110,7 @@ const renderItem = ({ item }: { item: Ingredient }) => {
 
 
   return (
-    <View style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         {/* HEADER */}
         <View style={styles.headerRow}>
@@ -189,7 +190,7 @@ const renderItem = ({ item }: { item: Ingredient }) => {
           </View>
         </Modal>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

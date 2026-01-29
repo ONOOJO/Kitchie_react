@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from "../../styles/homescreen.styles";
 import WiggleImage from "../components/WiggleImage";
 
@@ -20,7 +21,7 @@ const HomeScreen: FC = () => {
       resizeMode="cover"  
     >
 
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         {/* HEADER */}
         <View style={styles.headerRow}>
           <Image
@@ -57,7 +58,7 @@ const HomeScreen: FC = () => {
             </View>
           </View>
         </View>
-      </View>
+      </SafeAreaView>
     </ImageBackground>
   );
 };
