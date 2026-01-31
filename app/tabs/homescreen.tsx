@@ -4,7 +4,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import React, { FC, useCallback, useState } from "react";
-import { ImageBackground, TouchableOpacity, View } from "react-native";
+import { Alert, ImageBackground, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { getIngredientAsset } from "../../src/ingredientImages";
@@ -62,7 +62,7 @@ const HomeScreen: FC = () => {
           />
 
           <View style={styles.headerIcons}>
-            <TouchableOpacity style={styles.iconButton}>
+            <TouchableOpacity style={styles.iconButton} onPress={() => Alert.alert("Coming soon...")}>
               <Feather name="settings" size={22} color="#f29f9b" />
             </TouchableOpacity>
           </View>

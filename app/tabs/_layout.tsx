@@ -20,26 +20,27 @@ export default function TabsLayout() {
               const isFocused = state.index === index;
 
               let icon = null;
+
               if (route.name === "homescreen") {
-                  icon = (
-                    <Ionicons
-                    name="home"
-                    size={26}
-                    color="#ffe9dc"
-                  />
+                icon = (
+                  <Ionicons name="home" size={26} color="#ffe9dc" />
                 );
-              } else if (route.name === "stockscreen") {
-                  icon = (
-                    <Feather
-                    name="edit-3"
-                    size={24}
-                    color="#ffe9dc"
-                  />
+              } 
+              else if (route.name === "stockscreen") {
+                icon = (
+                  <Feather name="edit-3" size={24} color="#ffe9dc" />
+                );
+              } 
+              else if (route.name === "recipescreen") {
+                icon = (
+                  <Ionicons name="restaurant" size={26} color="#ffe9dc" />
                 );
               }
-              // when you add more screens, add icons here:
-              // else if (route.name === "shopping") { ... }
-              // else if (route.name === "search") { ... }
+              else if (route.name === "shoppingscreen") {
+                icon = (
+                  <Ionicons name="cart" size={26} color="#ffe9dc" />
+                );
+              }
 
               const onPress = () => {
                 if (!isFocused) {
@@ -65,17 +66,10 @@ export default function TabsLayout() {
         </View>
       )}
     >
-      <Tabs.Screen
-        name="homescreen"
-        options={{ title: "Home" }}
-      />
-      <Tabs.Screen
-        name="stockscreen"
-        options={{ title: "Inventory" }}
-      />
-      {/* later you can add: */}
-      {/* <Tabs.Screen name="shopping" options={{ title: "Shopping" }} /> */}
-      {/* <Tabs.Screen name="search" options={{ title: "Search" }} /> */}
+      <Tabs.Screen name="homescreen" options={{ title: "Home" }} />
+      <Tabs.Screen name="stockscreen" options={{ title: "Inventory" }} />
+      <Tabs.Screen name="recipescreen" options={{ title: "Recipes" }} />
+      <Tabs.Screen name="shoppingscreen" options={{ title: "Shopping" }} />
     </Tabs>
   );
 }

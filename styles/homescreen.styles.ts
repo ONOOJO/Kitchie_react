@@ -50,7 +50,7 @@ export const styles = StyleSheet.create({
     position: "absolute",
     zIndex: 10, // Brings the ingredients forward
     elevation: 10, // Android requires this?
-    left: 50,
+    left: 40,
     bottom: 20,
   },
 
