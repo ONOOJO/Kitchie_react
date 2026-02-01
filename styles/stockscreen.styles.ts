@@ -10,36 +10,35 @@ export const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 8,
+    paddingHorizontal: 12,
+    paddingTop: 6,
+    paddingBottom: 10,
   },
 
   /* =========================
-   * HEADER
-   * ========================= */
+  * HEADER (MATCH RECIPESCREEN EXACTLY)
+  * ========================= */
   headerRow: {
+    height: 52,                  // 🔑 exact height
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 8,
+    justifyContent: "space-between",
+    paddingHorizontal: 6,        // 🔑 exact padding
+    marginBottom: 10,            // 🔑 same spacing
   },
   iconButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 999,
+    width: 38,
+    height: 38,
+    borderRadius: 12,
+    backgroundColor: "rgba(255,255,255,0.65)",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#ffd9c9",
   },
   headerTitle: {
-    flex: 1,
-    textAlign: "center",
-    fontSize: 22,
-    fontWeight: "700",
-    color: "#f2876d",
-  },
-  headerRight: {
-    width: 36,
-    alignItems: "flex-end",
+    fontSize: 20,
+    fontWeight: "900",
+    color: "#f29f9b",
+    letterSpacing: 0.2,
   },
 
   /* =========================
@@ -72,7 +71,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 12,
     paddingHorizontal: 2,
-    backgroundColor: "#ffd5aeff",
+    backgroundColor: "rgba(255,255,255,0.55)",
     borderRadius: 25,
     marginBottom: 8,
     marginHorizontal: 4,
@@ -136,46 +135,99 @@ export const styles = StyleSheet.create({
   },
 
   /* =========================
-   * MODAL BUTTONS
+   * MODAL (MATCH RECIPE MODAL)
    * ========================= */
+  modalBackdrop: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.35)",
+  },
+
+  // Same “card feel” as Recipe createModalCard, but centered like Inventory
+  invModalCard: {
+    position: "absolute",
+    left: 12,
+    right: 12,
+    top: 120, // tweak higher/lower if you want
+    borderRadius: 18,
+    backgroundColor: "#ffe9dc",
+    padding: 14,
+  },
+
+  // Reuse the exact header row / close button vibe
+  createHeaderRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
+  createTitle: {
+    fontSize: 18,
+    fontWeight: "900",
+    color: "#b7747c",
+  },
+  sheetClose: {
+    width: 36,
+    height: 36,
+    borderRadius: 12,
+    backgroundColor: "rgba(255,255,255,0.65)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  // Labels + inputs match recipe modal
+  createLabel: {
+    fontSize: 13,
+    fontWeight: "900",
+    color: "#b7747c",
+    marginBottom: 6,
+  },
+  createInput: {
+    height: 42,
+    borderRadius: 14,
+    paddingHorizontal: 12,
+    backgroundColor: "rgba(255,255,255,0.75)",
+    color: "#b7747c",
+    fontWeight: "800",
+  },
+
+  /* Buttons match the newer palette */
   modalButtonsRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 18,
+    marginTop: 16,
     alignItems: "center",
   },
   modalButtonsRight: {
     flexDirection: "row",
-    gap: 10, // or use marginLeft on buttons if you prefer
+    gap: 10,
   },
   modalButton: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 10,
     borderRadius: 999,
   },
 
-  // Variants
   modalButtonSecondary: {
-    backgroundColor: "#ffe6d5",
+    backgroundColor: "rgba(255,255,255,0.65)",
   },
   modalButtonPrimary: {
-    backgroundColor: "#f2876d",
+    backgroundColor: "#f29f9b",
   },
   modalButtonDanger: {
     backgroundColor: "#ff6b6b",
   },
 
-  // Text
   modalButtonSecondaryText: {
-    color: "#b7867c",
-    fontWeight: "600",
+    color: "#b7747c",
+    fontWeight: "900",
   },
   modalButtonPrimaryText: {
     color: "#ffe9dc",
-    fontWeight: "700",
+    fontWeight: "900",
   },
   modalButtonDangerText: {
     color: "#fff",
-    fontWeight: "600",
+    fontWeight: "900",
   },
+
 });

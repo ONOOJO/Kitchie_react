@@ -1,372 +1,451 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  /* =========================
-   * LAYOUT / SCREEN
-   * ========================= */
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#ffe9dc",
-  },
-  container: {
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 8,
-  },
+    safeArea: {
+        flex: 1,
+        backgroundColor: "#ffe9dc",
+    },
+    container: {
+        flex: 1,
+        paddingHorizontal: 12,
+        paddingTop: 6,
+        paddingBottom: 10,
+    },
 
-  /* =========================
-   * HEADER
-   * ========================= */
-  headerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  iconButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 999,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#ffd9c9",
-  },
-  headerTitle: {
-    flex: 1,
-    textAlign: "center",
-    fontSize: 22,
-    fontWeight: "700",
-    color: "#f2876d",
-  },
-  headerRightSpacer: {
-    width: 36,
-  },
+    // Header (same vibe)
+    headerRow: {
+        height: 52,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        paddingHorizontal: 6,
+        marginBottom: 10,
+    },
+    headerTitle: {
+        fontSize: 20,
+        fontWeight: "900",
+        color: "#f29f9b",
+        letterSpacing: 0.2,
+    },
+    iconButton: {
+        width: 38,
+        height: 38,
+        borderRadius: 12,
+        backgroundColor: "rgba(255,255,255,0.65)",
+        alignItems: "center",
+        justifyContent: "center",
+    },
 
-  /* =========================
-   * SEARCH
-   * ========================= */
-  searchBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    backgroundColor: "#ffd9c9",
-    borderRadius: 16,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    marginBottom: 14,
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 16,
-    color: "#6b4b52",
-    paddingVertical: 0,
-  },
+    // Split layout
+    splitWrap: {
+        flex: 1,
+        flexDirection: "row",
+        gap: 12,
+    },
+    splitWrapNarrow: {
+        flexDirection: "column",
+    },
 
-  /* =========================
-   * RECIPE LIST
-   * ========================= */
-  listContent: {
-    paddingBottom: 140,
-  },
-  recipeCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 14,
-    borderRadius: 18,
-    padding: 14,
-    backgroundColor: "#ffd9c9",
-    marginBottom: 12,
-  },
-  recipeIconWrap: {
-    width: 56,
-    height: 56,
-    borderRadius: 16,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#f7b7a3",
-  },
-  recipeIconEmoji: {
-    fontSize: 26,
-  },
-  recipeTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: "#2a1d1f",
-  },
+    panel: {
+        flex: 1,
+        borderRadius: 18,
+        backgroundColor: "rgba(255,255,255,0.55)",
+        padding: 12,
+    },
+    leftPanel: {
+        flex: 1,
+    },
+    rightPanel: {
+        flex: 1,
+    },
+    panelTitle: {
+        fontSize: 16,
+        fontWeight: "900",
+        color: "#b7747c",
+        marginBottom: 10,
+    },
 
-  /* =========================
-   * MODAL / BOTTOM SHEET
-   * ========================= */
-  modalBackdrop: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.18)",
-  },
-  sheet: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
-    borderTopLeftRadius: 26,
-    borderTopRightRadius: 26,
-    backgroundColor: "#ffe9dc",
-    paddingHorizontal: 20,
-    paddingTop: 10,
-    paddingBottom: 24,
-  },
-  sheetHandle: {
-    alignSelf: "center",
-    width: 52,
-    height: 5,
-    borderRadius: 3,
-    backgroundColor: "#e0a89d",
-    marginBottom: 10,
-  },
-  sheetHeaderRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 6,
-  },
-  sheetTitle: {
-    fontSize: 22,
-    fontWeight: "800",
-    color: "#2a1d1f",
-  },
-  sheetClose: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#ffd9c9",
-  },
+    // Search
+    searchBar: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 10,
+        borderRadius: 14,
+        paddingHorizontal: 12,
+        height: 42,
+        backgroundColor: "rgba(255,255,255,0.75)",
+    },
+    searchInput: {
+        flex: 1,
+        height: 42,
+        color: "#b7747c",
+        fontWeight: "700",
+    },
 
-  /* =========================
-   * FILTER
-   * ========================= */
-  filterRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    marginBottom: 12,
-  },
-  filterLabel: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#2a1d1f",
-  },
-  filterOption: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#f2876d",
-  },
-  filterActive: {
-    textDecorationLine: "underline",
-  },
+    // List
+    list: {
+        flex: 1,
+        marginTop: 10,
+    },
+    listContent: {
+        paddingBottom: 16,
+        gap: 10,
+    },
 
-  /* =========================
-   * INGREDIENT GRID
-   * ========================= */
-  ingredientGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 14,
-  },
-  ingredientTile: {
-    width: "22%", // ~4 per row
-    alignItems: "center",
-  },
-  ingredientImageWrap: {
-    width: 58,
-    height: 58,
-    borderRadius: 14,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  ingredientImageBase: {
-    width: 44,
-    height: 44,
-  },
-  ingredientName: {
-    marginTop: 6,
-    fontSize: 12,
-    fontWeight: "600",
-    color: "#2a1d1f",
-    textAlign: "center",
-  },
-  ingredientQty: {
-    marginTop: 2,
-    fontSize: 12,
-    fontWeight: "600",
-    color: "#6b4b52",
-    textAlign: "center",
-  },
+    recipeCard: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+        borderRadius: 16,
+        backgroundColor: "rgba(255,255,255,0.70)",
+    },
+    recipeCardSelected: {
+        backgroundColor: "rgba(255,255,255,0.92)",
+    },
+    recipeIconWrap: {
+        width: 38,
+        height: 38,
+        borderRadius: 14,
+        backgroundColor: "rgba(242,159,155,0.20)",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    recipeIconEmoji: {
+        fontSize: 18,
+    },
+    recipeTitle: {
+        flex: 1,
+        fontSize: 14,
+        fontWeight: "900",
+        color: "#b7747c",
+    },
 
-  /* =========================
-   * MISSING INGREDIENT STATE
-   * ========================= */
-  missingIngredientImage: {
-    opacity: 0.25,
-  },
-  mutedText: {
-    opacity: 0.45,
-  },
-  missingOverlay: {
-    position: "absolute",
-    bottom: -6,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 12,
-    backgroundColor: "rgba(0,0,0,0.15)",
-  },
-  missingOverlayText: {
-    fontSize: 10,
-    fontWeight: "700",
-    color: "#fff",
-  },
-    /* =========================
-   * CREATE RECIPE MODAL
-   * ========================= */
-  createModalCard: {
-    position: "absolute",
-    left: 20,
-    right: 20,
-    top: 110,
-    maxHeight: "70%",
-    borderRadius: 22,
-    backgroundColor: "#ffe9dc",
-    padding: 16,
-  },
-  createHeaderRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
-  createTitle: {
-    fontSize: 20,
-    fontWeight: "800",
-    color: "#2a1d1f",
-  },
-  createLabel: {
-    fontSize: 14,
-    fontWeight: "700",
-    color: "#2a1d1f",
-    marginBottom: 6,
-  },
-  createInput: {
-    backgroundColor: "#ffd9c9",
-    borderRadius: 14,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 15,
-    color: "#2a1d1f",
-  },
-  addIngRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  addIngButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 14,
-    backgroundColor: "#b7747c",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  hintText: {
-    marginTop: 8,
-    color: "#b7747c",
-    opacity: 0.8,
-  },
-  ingChipRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "rgba(183,116,124,0.12)",
-    borderRadius: 14,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    marginBottom: 8,
-  },
-  ingChipText: {
-    fontWeight: "700",
-    color: "#2a1d1f",
-  },
+    // Empty states
+    emptyBox: {
+        marginTop: 18,
+        alignItems: "center",
+        justifyContent: "center",
+        paddingHorizontal: 12,
+    },
+    emptyTitle: {
+        color: "#b7747c",
+        fontWeight: "900",
+        fontSize: 16,
+    },
+    emptySub: {
+        marginTop: 6,
+        color: "#b7747c",
+        opacity: 0.8,
+        fontWeight: "700",
+    },
 
-  dishPickerRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
-  },
-  dishPick: {
-    width: "30%",
-    backgroundColor: "#ffd9c9",
-    borderRadius: 16,
-    paddingVertical: 10,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  dishPickActive: {
-    borderWidth: 2,
-    borderColor: "#b7747c",
-  },
-  dishPickEmoji: {
-    fontSize: 22,
-    marginBottom: 4,
-  },
-  dishPickLabel: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: "#6b4b52",
-  },
+    rightEmpty: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        paddingHorizontal: 12,
+    },
+    rightEmptyTitle: {
+        fontSize: 16,
+        fontWeight: "900",
+        color: "#b7747c",
+    },
+    rightEmptySub: {
+        marginTop: 6,
+        color: "#b7747c",
+        opacity: 0.8,
+        fontWeight: "700",
+        textAlign: "center",
+    },
 
-  saveButton: {
-    marginTop: 16,
-    backgroundColor: "#b7747c",
-    borderRadius: 18,
-    paddingVertical: 12,
-    alignItems: "center",
-  },
-  saveButtonText: {
-    color: "#ffe9dc",
-    fontWeight: "900",
-    fontSize: 16,
-  },
-  suggestionBox: {
-  marginTop: 6,
-  backgroundColor: "#ffe9dc",
-  borderRadius: 14,
-  borderWidth: 1,
-  borderColor: "rgba(183,116,124,0.35)",
-  overflow: "hidden",
-},
-suggestionItem: {
-  paddingVertical: 10,
-  paddingHorizontal: 12,
-  backgroundColor: "#ffd9c9",
-  borderBottomWidth: 1,
-  borderBottomColor: "rgba(183,116,124,0.18)",
-},
-suggestionText: {
-  fontSize: 14,
-  fontWeight: "700",
-  color: "#2a1d1f",
-},
-deleteButton: {
-  marginTop: 16,
-  backgroundColor: "#b7747c",
-  borderRadius: 18,
-  paddingVertical: 12,
-  alignItems: "center",
-  justifyContent: "center",
-  flexDirection: "row",
-  gap: 8,
-},
-deleteButtonText: {
-  color: "#ffe9dc",
-  fontWeight: "900",
-  fontSize: 16,
-},
+    // Right header row + filter chips
+    rightHeaderRow: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 10,
+        marginBottom: 8,
+    },
+    filterRow: {
+        flexDirection: "row",
+        gap: 8,
+    },
+    filterChip: {
+        paddingHorizontal: 10,
+        paddingVertical: 6,
+        borderRadius: 999,
+        backgroundColor: "rgba(255,255,255,0.65)",
+        color: "#b7747c",
+        fontWeight: "900",
+        fontSize: 12,
+    },
+    filterChipActive: {
+        backgroundColor: "rgba(242,159,155,0.28)",
+    },
 
+    // Ingredient list card (like mock)
+    ingredientsCard: {
+        flex: 1,
+        borderRadius: 16,
+        backgroundColor: "rgba(255,255,255,0.78)",
+        padding: 10,
+        marginBottom: 10,
+    },
+    ingredientRow: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 10,
+        paddingVertical: 8,
+    },
+    ingredientImageWrap: {
+        width: 34,
+        height: 34,
+        borderRadius: 12,
+        backgroundColor: "rgba(242,159,155,0.12)",
+        alignItems: "center",
+        justifyContent: "center",
+        overflow: "hidden",
+    },
+    ingredientImageBase: {
+        width: 26,
+        height: 26,
+    },
+    ingredientText: {
+        flex: 1,
+        fontSize: 13,
+        fontWeight: "900",
+        color: "#b7747c",
+    },
+    ingredientAmount: {
+        color: "#c98b92",
+        fontWeight: "900",
+    },
+
+    missingIngredientImage: {
+        opacity: 0.35,
+    },
+    mutedText: {
+        opacity: 0.55,
+    },
+
+    sectionTitle: {
+        fontSize: 14,
+        fontWeight: "900",
+        color: "#b7747c",
+        marginTop: 2,
+        marginBottom: 8,
+    },
+    instructionsBox: {
+        borderRadius: 16,
+        backgroundColor: "rgba(255,255,255,0.70)",
+        padding: 12,
+        marginBottom: 10,
+    },
+    instructionsText: {
+        color: "#b7747c",
+        fontWeight: "700",
+        lineHeight: 20,
+        opacity: 0.9,
+    },
+
+    startButton: {
+        height: 44,
+        borderRadius: 999,
+        backgroundColor: "#f29f9b",
+        alignItems: "center",
+        justifyContent: "center",
+        marginBottom: 10,
+    },
+    startButtonText: {
+        color: "#ffe9dc",
+        fontWeight: "900",
+        fontSize: 14,
+    },
+
+    // Delete (bottom)
+    deleteButton: {
+        height: 42,
+        borderRadius: 14,
+        backgroundColor: "rgba(183,116,124,0.92)",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 8,
+    },
+    deleteButtonText: {
+        color: "#ffe9dc",
+        fontWeight: "900",
+        fontSize: 14,
+    },
+
+    // Edit Button
+    editButton: {
+        height: 44,
+        borderRadius: 14,
+        backgroundColor: "rgba(242,159,155,0.85)",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 8,
+        marginBottom: 10,
+    },
+    editButtonText: {
+        color: "#ffe9dc",
+        fontWeight: "900",
+        fontSize: 14,
+    },
+
+
+    // Modals (create)
+    modalBackdrop: {
+        flex: 1,
+        backgroundColor: "rgba(0,0,0,0.35)",
+    },
+
+    createModalCard: {
+        position: "absolute",
+        left: 12,
+        right: 12,
+        top: 90,
+        bottom: 40,
+        borderRadius: 18,
+        backgroundColor: "#ffe9dc",
+        padding: 14,
+    },
+    createHeaderRow: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        marginBottom: 10,
+    },
+    createTitle: {
+        fontSize: 18,
+        fontWeight: "900",
+        color: "#b7747c",
+    },
+    sheetClose: {
+        width: 36,
+        height: 36,
+        borderRadius: 12,
+        backgroundColor: "rgba(255,255,255,0.65)",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+
+    createLabel: {
+        fontSize: 13,
+        fontWeight: "900",
+        color: "#b7747c",
+        marginBottom: 6,
+    },
+    createInput: {
+        height: 42,
+        borderRadius: 14,
+        paddingHorizontal: 12,
+        backgroundColor: "rgba(255,255,255,0.75)",
+        color: "#b7747c",
+        fontWeight: "800",
+    },
+
+    addIngRow: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 8,
+    },
+    addIngButton: {
+        width: 42,
+        height: 42,
+        borderRadius: 14,
+        backgroundColor: "#f29f9b",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+
+    suggestionBox: {
+        marginTop: 8,
+        borderRadius: 14,
+        backgroundColor: "rgba(255,255,255,0.92)",
+        overflow: "hidden",
+        borderWidth: 1,
+        borderColor: "rgba(183,116,124,0.18)",
+    },
+    suggestionItem: {
+        paddingVertical: 10,
+        paddingHorizontal: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: "rgba(183,116,124,0.10)",
+    },
+    suggestionText: {
+        color: "#b7747c",
+        fontWeight: "900",
+    },
+
+    hintText: {
+        marginTop: 10,
+        color: "#b7747c",
+        opacity: 0.85,
+        fontWeight: "700",
+    },
+
+    ingChipRow: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 12,
+        borderRadius: 14,
+        backgroundColor: "rgba(255,255,255,0.65)",
+        marginBottom: 8,
+    },
+    ingChipText: {
+        color: "#b7747c",
+        fontWeight: "900",
+    },
+
+    dishPickerRow: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        gap: 10,
+        marginTop: 6,
+    },
+    dishPick: {
+        width: "31%",
+        minWidth: 92,
+        borderRadius: 16,
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+        backgroundColor: "rgba(255,255,255,0.65)",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    dishPickActive: {
+        backgroundColor: "rgba(242,159,155,0.25)",
+    },
+    dishPickEmoji: {
+        fontSize: 18,
+        marginBottom: 4,
+    },
+    dishPickLabel: {
+        color: "#b7747c",
+        fontWeight: "900",
+        fontSize: 12,
+    },
+
+    saveButton: {
+        marginTop: 14,
+        height: 46,
+        borderRadius: 999,
+        backgroundColor: "#f29f9b",
+        alignItems: "center",
+        justifyContent: "center",
+        marginBottom: 30,
+    },
+    saveButtonText: {
+        color: "#ffe9dc",
+        fontWeight: "900",
+        fontSize: 14,
+    },
 });

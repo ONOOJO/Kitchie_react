@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import React, { FC, useCallback, useMemo, useState } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import {
   Alert,
   FlatList,
@@ -14,14 +14,12 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import {
-  getIngredientAsset,
-  INGREDIENT_KEYS, // ✅ make sure you exported this from src/ingredientImages.ts
-} from "../../src/ingredientImages";
+import { getIngredientAsset, INGREDIENT_KEYS } from "../../src/ingredientImages";
 import { styles } from "../../styles/recipescreen.styles";
 
 type PantryIngredient = {
@@ -60,16 +58,17 @@ const DISH_IMAGE_CHOICES = [
 
 const RecipeScreen: FC = () => {
   const router = useRouter();
+  const { width } = useWindowDimensions();
+  const isNarrow = width < 380;
 
   const [pantry, setPantry] = useState<PantryIngredient[]>([]);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [query, setQuery] = useState("");
 
-  // recipe details sheet
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [filterMode, setFilterMode] = useState<"all" | "missing">("all");
 
-  // create recipe modal
+  // CREATE modal state
   const [createOpen, setCreateOpen] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [newIngredients, setNewIngredients] = useState<RecipeIngredient[]>([]);
@@ -77,7 +76,10 @@ const RecipeScreen: FC = () => {
   const [draftIngQty, setDraftIngQty] = useState("");
   const [draftDishImageKey, setDraftDishImageKey] = useState<string>("cake");
 
-  // ✅ autocomplete state
+  // EDIT modal state (reuses same fields)
+  const [editOpen, setEditOpen] = useState(false);
+
+  // autocomplete state
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIngredientKey, setSelectedIngredientKey] = useState<string | null>(null);
 
@@ -95,8 +97,11 @@ const RecipeScreen: FC = () => {
 
           if (!alive) return;
 
-          setPantry(pantryRaw ? JSON.parse(pantryRaw) : []);
-          setRecipes(recipesRaw ? JSON.parse(recipesRaw) : []);
+          const pantryData: PantryIngredient[] = pantryRaw ? JSON.parse(pantryRaw) : [];
+          const recipeData: Recipe[] = recipesRaw ? JSON.parse(recipesRaw) : [];
+
+          setPantry(pantryData);
+          setRecipes(recipeData);
         } catch (e) {
           console.warn("Failed to load pantry/recipes", e);
           if (!alive) return;
@@ -110,6 +115,23 @@ const RecipeScreen: FC = () => {
       };
     }, [])
   );
+
+  // ensure something is selected once recipes load
+  useEffect(() => {
+    if (!selectedRecipe && recipes.length > 0) {
+      setSelectedRecipe(recipes[0]);
+      setFilterMode("all");
+    }
+    if (selectedRecipe && recipes.length > 0) {
+      const stillExists = recipes.some((r) => r.id === selectedRecipe.id);
+      if (!stillExists) {
+        setSelectedRecipe(recipes[0] ?? null);
+        setFilterMode("all");
+      }
+    }
+    if (recipes.length === 0) setSelectedRecipe(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recipes]);
 
   // map pantry name -> qty
   const pantryQtyMap = useMemo(() => {
@@ -129,8 +151,8 @@ const RecipeScreen: FC = () => {
     return recipes.filter((r) => normalize(r.title).includes(q));
   }, [query, recipes]);
 
-  // bottom sheet ingredient list (with has/missing)
-  const sheetIngredients = useMemo(() => {
+  // ingredient list with has/missing
+  const panelIngredients = useMemo(() => {
     if (!selectedRecipe) return [];
 
     const list = selectedRecipe.ingredients.map((ri) => {
@@ -138,37 +160,51 @@ const RecipeScreen: FC = () => {
       const haveQty = pantryQtyMap.get(key) ?? 0;
       const needQty = ri.quantity ?? 1;
       const hasIt = haveQty >= needQty && haveQty > 0;
-
       return { ...ri, key, hasIt, haveQty, needQty };
     });
 
     return filterMode === "missing" ? list.filter((x) => !x.hasIt) : list;
   }, [selectedRecipe, pantryQtyMap, filterMode]);
 
-  // ✅ autocomplete suggestions (from INGREDIENT_KEYS)
+  // autocomplete suggestions
   const ingredientSuggestions = useMemo(() => {
     const q = normalize(draftIngName);
     if (!q) return [];
     return INGREDIENT_KEYS.filter((k) => k.includes(q)).slice(0, 6);
   }, [draftIngName]);
 
-  const openCreateModal = () => {
+  const resetRecipeDraft = () => {
     setNewTitle("");
     setNewIngredients([]);
     setDraftIngName("");
     setDraftIngQty("");
     setDraftDishImageKey("cake");
-
     setSelectedIngredientKey(null);
     setShowSuggestions(false);
+  };
 
+  const openCreateModal = () => {
+    resetRecipeDraft();
     setCreateOpen(true);
+  };
+
+  const openEditModal = () => {
+    if (!selectedRecipe) return;
+    // preload draft from selected recipe
+    setNewTitle(selectedRecipe.title);
+    setNewIngredients(selectedRecipe.ingredients ?? []);
+    setDraftIngName("");
+    setDraftIngQty("");
+    setDraftDishImageKey(selectedRecipe.imageKey ?? "cake");
+    setSelectedIngredientKey(null);
+    setShowSuggestions(false);
+    setEditOpen(true);
   };
 
   const addDraftIngredient = () => {
     const candidate = selectedIngredientKey ?? normalize(draftIngName);
 
-    // ✅ FORCE selection from coded options
+    // force selection from coded options
     if (!INGREDIENT_KEYS.includes(candidate)) {
       Alert.alert("Pick from the list", "Please select an ingredient from suggestions.");
       return;
@@ -212,10 +248,46 @@ const RecipeScreen: FC = () => {
       const next = [recipe, ...recipes];
       await AsyncStorage.setItem(RECIPES_KEY, JSON.stringify(next));
       setRecipes(next);
+      setSelectedRecipe(recipe);
+      setFilterMode("all");
       setCreateOpen(false);
     } catch (e) {
       console.warn("Failed to save recipe", e);
       Alert.alert("Error", "Could not save the recipe.");
+    }
+  };
+
+  const saveEditedRecipe = async () => {
+    if (!selectedRecipe) return;
+
+    const title = newTitle.trim();
+    if (!title) {
+      Alert.alert("Missing name", "Please enter a dish name.");
+      return;
+    }
+    if (newIngredients.length === 0) {
+      Alert.alert("No ingredients", "Add at least 1 ingredient.");
+      return;
+    }
+
+    try {
+      const updated: Recipe = {
+        ...selectedRecipe,
+        title,
+        imageKey: draftDishImageKey,
+        ingredients: newIngredients,
+      };
+
+      const next = recipes.map((r) => (r.id === selectedRecipe.id ? updated : r));
+      await AsyncStorage.setItem(RECIPES_KEY, JSON.stringify(next));
+
+      setRecipes(next);
+      setSelectedRecipe(updated);
+      setFilterMode("all");
+      setEditOpen(false);
+    } catch (e) {
+      console.warn("Failed to edit recipe", e);
+      Alert.alert("Error", "Could not update the recipe.");
     }
   };
 
@@ -235,7 +307,6 @@ const RecipeScreen: FC = () => {
               const next = recipes.filter((r) => r.id !== selectedRecipe.id);
               await AsyncStorage.setItem(RECIPES_KEY, JSON.stringify(next));
               setRecipes(next);
-              setSelectedRecipe(null); // close sheet
             } catch (e) {
               console.warn("Failed to delete recipe", e);
               Alert.alert("Error", "Could not delete the recipe.");
@@ -249,8 +320,92 @@ const RecipeScreen: FC = () => {
   const dishEmoji = (imageKey?: string) =>
     DISH_IMAGE_CHOICES.find((x) => x.key === imageKey)?.emoji ?? "🍽️";
 
+  // ========= FINISH COOKING (DEDUCT INVENTORY) =========
+  const parseNumber = (v: unknown) => {
+    const n = Number(String(v ?? "").replace(",", ".").trim());
+    return Number.isFinite(n) ? n : 0;
+  };
+
+  const formatNumber = (n: number) => {
+    const rounded = Math.round(n * 100) / 100;
+    return Number.isInteger(rounded) ? String(rounded) : String(rounded);
+  };
+
+  const finishCookingConfirmed = async () => {
+    if (!selectedRecipe) return;
+
+    try {
+      const pantryRaw = await AsyncStorage.getItem(PANTRY_KEY);
+      const pantryNow: PantryIngredient[] = pantryRaw ? JSON.parse(pantryRaw) : [];
+
+      const indexByName = new Map<string, number>();
+      pantryNow.forEach((p, idx) => indexByName.set(normalize(p.name), idx));
+
+      const nextPantry = [...pantryNow];
+
+      for (const ri of selectedRecipe.ingredients) {
+        const key = normalize(ri.name);
+        const need = ri.quantity ?? 1;
+
+        const idx = indexByName.get(key);
+        const have = idx !== undefined ? parseNumber(nextPantry[idx].quantity) : 0;
+
+        if (have < need) {
+          Alert.alert(
+            "Not enough ingredients",
+            `You don't have enough ${toTitle(ri.name)}.\nNeed: x${need}\nHave: x${have}`
+          );
+          return;
+        }
+
+        const remaining = have - need;
+
+        if (remaining <= 0) {
+          nextPantry.splice(idx!, 1);
+
+          // rebuild indices after splice
+          indexByName.clear();
+          nextPantry.forEach((p, i) => indexByName.set(normalize(p.name), i));
+        } else {
+          nextPantry[idx!] = { ...nextPantry[idx!], quantity: formatNumber(remaining) };
+        }
+      }
+
+      await AsyncStorage.setItem(PANTRY_KEY, JSON.stringify(nextPantry));
+      setPantry(nextPantry);
+
+      Alert.alert("Done!", "Inventory updated ✅");
+    } catch (e) {
+      console.warn("Finish cooking failed", e);
+      Alert.alert("Error", "Could not update inventory.");
+    }
+  };
+
+  const finishCooking = () => {
+    if (!selectedRecipe) return;
+
+    const missing = panelIngredients.filter((x) => !x.hasIt);
+    if (missing.length > 0) {
+      Alert.alert(
+        "Missing ingredients",
+        `You’re missing: ${missing.map((m) => toTitle(m.name)).join(", ")}`
+      );
+      return;
+    }
+
+    Alert.alert(
+      "Finish cooking?",
+      "This will deduct the required ingredients from your inventory.",
+      [
+        { text: "Cancel", style: "cancel" },
+        { text: "Finish", style: "default", onPress: () => void finishCookingConfirmed() },
+      ]
+    );
+  };
+  // ================================================
+
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={["top"]}>
       <View style={styles.container}>
         {/* HEADER */}
         <View style={styles.headerRow}>
@@ -265,148 +420,171 @@ const RecipeScreen: FC = () => {
           </TouchableOpacity>
         </View>
 
-        {/* SEARCH */}
-        <View style={styles.searchBar}>
-          <Feather name="search" size={18} color="#b7747c" />
-          <TextInput
-            value={query}
-            onChangeText={setQuery}
-            placeholder="Search recipes"
-            placeholderTextColor="#b7747c"
-            style={styles.searchInput}
-          />
+        {/* SPLIT VIEW */}
+        <View style={[styles.splitWrap, isNarrow && styles.splitWrapNarrow]}>
+          {/* LEFT PANEL */}
+          <View style={[styles.panel, styles.leftPanel]}>
+            <Text style={styles.panelTitle}>Find a Recipe</Text>
+
+            <View style={styles.searchBar}>
+              <Feather name="search" size={18} color="#b7747c" />
+              <TextInput
+                value={query}
+                onChangeText={setQuery}
+                placeholder="Search recipes"
+                placeholderTextColor="#b7747c"
+                style={styles.searchInput}
+              />
+            </View>
+
+            {recipes.length === 0 ? (
+              <View style={styles.emptyBox}>
+                <Text style={styles.emptyTitle}>No recipes yet</Text>
+                <Text style={styles.emptySub}>Tap + to create one.</Text>
+              </View>
+            ) : (
+              <FlatList
+                data={filteredRecipes}
+                keyExtractor={(item) => item.id}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.listContent}
+                style={styles.list}
+                renderItem={({ item }) => {
+                  const selected = item.id === selectedRecipe?.id;
+                  return (
+                    <TouchableOpacity
+                      activeOpacity={0.85}
+                      style={[styles.recipeCard, selected && styles.recipeCardSelected]}
+                      onPress={() => {
+                        setSelectedRecipe(item);
+                        setFilterMode("all");
+                      }}
+                    >
+                      <View style={styles.recipeIconWrap}>
+                        <Text style={styles.recipeIconEmoji}>{dishEmoji(item.imageKey)}</Text>
+                      </View>
+
+                      <Text style={styles.recipeTitle} numberOfLines={1}>
+                        {item.title}
+                      </Text>
+
+                      <Ionicons name="chevron-forward" size={18} color="#b7747c" />
+                    </TouchableOpacity>
+                  );
+                }}
+              />
+            )}
+          </View>
+
+          {/* RIGHT PANEL */}
+          <View style={[styles.panel, styles.rightPanel]}>
+            {!selectedRecipe ? (
+              <View style={styles.rightEmpty}>
+                <Text style={styles.rightEmptyTitle}>Select a recipe</Text>
+                <Text style={styles.rightEmptySub}>Pick one from the list to view ingredients.</Text>
+              </View>
+            ) : (
+              <>
+                <View style={styles.rightHeaderRow}>
+                  <Text style={styles.panelTitle}>{selectedRecipe.title}</Text>
+
+                  <View style={styles.filterRow}>
+                    <TouchableOpacity onPress={() => setFilterMode("all")} activeOpacity={0.85}>
+                      <Text
+                        style={[
+                          styles.filterChip,
+                          filterMode === "all" && styles.filterChipActive,
+                        ]}
+                      >
+                        All
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => setFilterMode("missing")} activeOpacity={0.85}>
+                      <Text
+                        style={[
+                          styles.filterChip,
+                          filterMode === "missing" && styles.filterChipActive,
+                        ]}
+                      >
+                        X
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                {/* Ingredient list */}
+                <View style={styles.ingredientsCard}>
+                  <ScrollView showsVerticalScrollIndicator={false}>
+                    {panelIngredients.map((ing) => {
+                      const asset = getIngredientAsset(ing.name);
+                      const muted = !ing.hasIt;
+
+                      return (
+                        <View key={ing.key} style={styles.ingredientRow}>
+                          <View style={styles.ingredientImageWrap}>
+                            <Image
+                              source={asset.source}
+                              style={[
+                                styles.ingredientImageBase,
+                                asset.style,
+                                muted && styles.missingIngredientImage,
+                              ]}
+                              contentFit="contain"
+                            />
+                          </View>
+
+                          <Text style={[styles.ingredientText, muted && styles.mutedText]}>
+                            {toTitle(ing.name)}{" "}
+                            <Text style={styles.ingredientAmount}>
+                              {formatNeed(ing.needQty, ing.unit)}
+                            </Text>
+                          </Text>
+
+                          <Ionicons
+                            name={ing.hasIt ? "checkmark-circle" : "close-circle"}
+                            size={20}
+                            color={ing.hasIt ? "#3CB371" : "#C7B1B1"}
+                          />
+                        </View>
+                      );
+                    })}
+                  </ScrollView>
+                </View>
+
+                {/* ✅ Buttons (Finish Cooking -> Edit Recipe -> Delete) */}
+                <TouchableOpacity
+                  style={styles.startButton}
+                  activeOpacity={0.9}
+                  onPress={finishCooking}
+                >
+                  <Text style={styles.startButtonText}>Finish Cooking</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.editButton}
+                  activeOpacity={0.9}
+                  onPress={openEditModal}
+                >
+                  <Ionicons name="create-outline" size={18} color="#ffe9dc" />
+                  <Text style={styles.editButtonText}>Edit recipe</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={deleteSelectedRecipe}
+                  style={styles.deleteButton}
+                  activeOpacity={0.9}
+                >
+                  <Ionicons name="trash-outline" size={18} color="#ffe9dc" />
+                  <Text style={styles.deleteButtonText}>Delete recipe</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
         </View>
 
-        {/* LIST */}
-        {recipes.length === 0 ? (
-          <View style={{ paddingTop: 24, alignItems: "center" }}>
-            <Text style={{ color: "#b7747c", fontWeight: "700", fontSize: 16 }}>
-              No recipes yet
-            </Text>
-            <Text style={{ marginTop: 6, color: "#b7747c", opacity: 0.8 }}>
-              Tap + to create one.
-            </Text>
-          </View>
-        ) : (
-          <FlatList
-            data={filteredRecipes}
-            keyExtractor={(item) => item.id}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.listContent}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                activeOpacity={0.85}
-                style={styles.recipeCard}
-                onPress={() => {
-                  setSelectedRecipe(item);
-                  setFilterMode("all");
-                }}
-              >
-                <View style={styles.recipeIconWrap}>
-                  <Text style={styles.recipeIconEmoji}>{dishEmoji(item.imageKey)}</Text>
-                </View>
-                <Text style={styles.recipeTitle}>{item.title}</Text>
-              </TouchableOpacity>
-            )}
-          />
-        )}
-
-        {/* RECIPE DETAILS SHEET */}
-        <Modal
-          visible={!!selectedRecipe}
-          transparent
-          animationType="slide"
-          onRequestClose={() => setSelectedRecipe(null)}
-        >
-          <Pressable style={styles.modalBackdrop} onPress={() => setSelectedRecipe(null)}>
-            <View />
-          </Pressable>
-
-          <View style={styles.sheet}>
-            <View style={styles.sheetHandle} />
-
-            <View style={styles.sheetHeaderRow}>
-              <Text style={styles.sheetTitle}>{selectedRecipe?.title} Recipe</Text>
-
-              <TouchableOpacity
-                onPress={() => setSelectedRecipe(null)}
-                style={styles.sheetClose}
-                activeOpacity={0.8}
-              >
-                <Ionicons name="close" size={22} color="#b7747c" />
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.filterRow}>
-              <Text style={styles.filterLabel}>Filter Ingredients:</Text>
-
-              <TouchableOpacity onPress={() => setFilterMode("all")} activeOpacity={0.8}>
-                <Text style={[styles.filterOption, filterMode === "all" && styles.filterActive]}>
-                  [All]
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={() => setFilterMode("missing")} activeOpacity={0.8}>
-                <Text
-                  style={[styles.filterOption, filterMode === "missing" && styles.filterActive]}
-                >
-                  [Missing]
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.ingredientGrid}>
-              {sheetIngredients.map((ing) => {
-                const asset = getIngredientAsset(ing.name);
-                return (
-                  <View key={ing.key} style={styles.ingredientTile}>
-                    <View style={styles.ingredientImageWrap}>
-                      <Image
-                        source={asset.source}
-                        style={[
-                          styles.ingredientImageBase,
-                          asset.style,
-                          !ing.hasIt && styles.missingIngredientImage,
-                        ]}
-                        contentFit="contain"
-                      />
-                      {!ing.hasIt && (
-                        <View style={styles.missingOverlay}>
-                          <Text style={styles.missingOverlayText}>Missing</Text>
-                        </View>
-                      )}
-                    </View>
-
-                    <Text style={[styles.ingredientName, !ing.hasIt && styles.mutedText]}>
-                      {toTitle(ing.name)}
-                    </Text>
-                    <Text style={[styles.ingredientQty, !ing.hasIt && styles.mutedText]}>
-                      {formatNeed(ing.needQty, ing.unit)}
-                    </Text>
-                  </View>
-                );
-              })}
-            </View>
-
-            {/* ✅ DELETE BUTTON */}
-            <TouchableOpacity
-              onPress={deleteSelectedRecipe}
-              style={styles.deleteButton}
-              activeOpacity={0.9}
-            >
-              <Ionicons name="trash-outline" size={18} color="#ffe9dc" />
-              <Text style={styles.deleteButtonText}>Delete recipe</Text>
-            </TouchableOpacity>
-          </View>
-        </Modal>
-
         {/* CREATE RECIPE MODAL */}
-        <Modal
-          visible={createOpen}
-          transparent
-          animationType="fade"
-          onRequestClose={() => setCreateOpen(false)}
-        >
+        <Modal visible={createOpen} transparent animationType="fade" onRequestClose={() => setCreateOpen(false)}>
           <Pressable
             style={styles.modalBackdrop}
             onPress={() => {
@@ -434,7 +612,6 @@ const RecipeScreen: FC = () => {
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false}>
-              {/* Dish name */}
               <Text style={styles.createLabel}>Dish name</Text>
               <TextInput
                 value={newTitle}
@@ -444,7 +621,6 @@ const RecipeScreen: FC = () => {
                 style={styles.createInput}
               />
 
-              {/* Ingredients */}
               <Text style={[styles.createLabel, { marginTop: 14 }]}>Required ingredients</Text>
 
               <View style={styles.addIngRow}>
@@ -477,7 +653,6 @@ const RecipeScreen: FC = () => {
                 </TouchableOpacity>
               </View>
 
-              {/* ✅ AUTOCOMPLETE DROPDOWN */}
               {showSuggestions && ingredientSuggestions.length > 0 && (
                 <View style={styles.suggestionBox}>
                   {ingredientSuggestions.map((k) => (
@@ -514,9 +689,7 @@ const RecipeScreen: FC = () => {
                 </View>
               )}
 
-              {/* Dish image picker (v1) */}
               <Text style={[styles.createLabel, { marginTop: 14 }]}>Dish image</Text>
-
               <View style={styles.dishPickerRow}>
                 {DISH_IMAGE_CHOICES.map((opt) => {
                   const selected = opt.key === draftDishImageKey;
@@ -536,6 +709,137 @@ const RecipeScreen: FC = () => {
 
               <TouchableOpacity onPress={saveRecipe} style={styles.saveButton} activeOpacity={0.9}>
                 <Text style={styles.saveButtonText}>Save Recipe</Text>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
+        </Modal>
+
+        {/* ✅ EDIT RECIPE MODAL (same UI, different save) */}
+        <Modal visible={editOpen} transparent animationType="fade" onRequestClose={() => setEditOpen(false)}>
+          <Pressable
+            style={styles.modalBackdrop}
+            onPress={() => {
+              setShowSuggestions(false);
+              setEditOpen(false);
+            }}
+          >
+            <View />
+          </Pressable>
+
+          <View style={styles.createModalCard}>
+            <View style={styles.createHeaderRow}>
+              <Text style={styles.createTitle}>Edit Recipe</Text>
+
+              <TouchableOpacity
+                onPress={() => {
+                  setShowSuggestions(false);
+                  setEditOpen(false);
+                }}
+                style={styles.sheetClose}
+                activeOpacity={0.8}
+              >
+                <Ionicons name="close" size={22} color="#b7747c" />
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <Text style={styles.createLabel}>Dish name</Text>
+              <TextInput
+                value={newTitle}
+                onChangeText={setNewTitle}
+                placeholder="e.g. Carrot Cake"
+                placeholderTextColor="#b7747c"
+                style={styles.createInput}
+              />
+
+              <Text style={[styles.createLabel, { marginTop: 14 }]}>Required ingredients</Text>
+
+              <View style={styles.addIngRow}>
+                <TextInput
+                  value={draftIngName}
+                  onChangeText={(t) => {
+                    setDraftIngName(t);
+                    setSelectedIngredientKey(null);
+                    setShowSuggestions(true);
+                  }}
+                  placeholder="Ingredient name"
+                  placeholderTextColor="#b7747c"
+                  style={[styles.createInput, { flex: 1 }]}
+                  autoCorrect={false}
+                  autoCapitalize="none"
+                  onFocus={() => setShowSuggestions(true)}
+                />
+
+                <TextInput
+                  value={draftIngQty}
+                  onChangeText={setDraftIngQty}
+                  placeholder="qty"
+                  placeholderTextColor="#b7747c"
+                  keyboardType="numeric"
+                  style={[styles.createInput, { width: 80 }]}
+                />
+
+                <TouchableOpacity onPress={addDraftIngredient} style={styles.addIngButton}>
+                  <Ionicons name="add" size={18} color="#ffe9dc" />
+                </TouchableOpacity>
+              </View>
+
+              {showSuggestions && ingredientSuggestions.length > 0 && (
+                <View style={styles.suggestionBox}>
+                  {ingredientSuggestions.map((k) => (
+                    <TouchableOpacity
+                      key={k}
+                      style={styles.suggestionItem}
+                      activeOpacity={0.85}
+                      onPress={() => {
+                        setDraftIngName(k);
+                        setSelectedIngredientKey(k);
+                        setShowSuggestions(false);
+                      }}
+                    >
+                      <Text style={styles.suggestionText}>{toTitle(k)}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+
+              {newIngredients.length === 0 ? (
+                <Text style={styles.hintText}>Add ingredients above.</Text>
+              ) : (
+                <View style={{ marginTop: 8 }}>
+                  {newIngredients.map((ing, idx) => (
+                    <View key={`${ing.name}-${idx}`} style={styles.ingChipRow}>
+                      <Text style={styles.ingChipText}>
+                        {toTitle(ing.name)} {ing.quantity ? `x${ing.quantity}` : ""}
+                      </Text>
+                      <TouchableOpacity onPress={() => removeIngredientAt(idx)} activeOpacity={0.8}>
+                        <Ionicons name="trash-outline" size={18} color="#b7747c" />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
+              )}
+
+              <Text style={[styles.createLabel, { marginTop: 14 }]}>Dish image</Text>
+              <View style={styles.dishPickerRow}>
+                {DISH_IMAGE_CHOICES.map((opt) => {
+                  const selected = opt.key === draftDishImageKey;
+                  return (
+                    <TouchableOpacity
+                      key={opt.key}
+                      onPress={() => setDraftDishImageKey(opt.key)}
+                      style={[styles.dishPick, selected && styles.dishPickActive]}
+                      activeOpacity={0.85}
+                    >
+                      <Text style={styles.dishPickEmoji}>{opt.emoji}</Text>
+                      <Text style={styles.dishPickLabel}>{opt.label}</Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+
+              <TouchableOpacity onPress={saveEditedRecipe} style={styles.saveButton} activeOpacity={0.9}>
+                <Text style={styles.saveButtonText}>Save Changes</Text>
               </TouchableOpacity>
             </ScrollView>
           </View>
@@ -563,7 +867,6 @@ function formatNeed(qty: number, unit?: string) {
 }
 
 function parseQty(q: unknown) {
-  // handles "5", "5x", "5 x", "x5" etc
   const s = String(q ?? "");
   const m = s.match(/(\d+(\.\d+)?)/);
   return m ? Number(m[1]) : 0;
