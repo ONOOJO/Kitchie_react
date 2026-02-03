@@ -1,4 +1,4 @@
-export const defaultIngredientImage = require("../assets/images/default.png");
+export const defaultIngredientImage = require("../assets/images/ingredients/default.png");
 
 type IngredientStyle = {
   width: number;
@@ -19,23 +19,51 @@ const defaultStyle: IngredientStyle = {
 
 const ingredientAssets: Record<string, IngredientAsset> = {
   milk: {
-    source: require("../assets/images/Milk.png"),
+    source: require("../assets/images/ingredients/Milk.png"),
     style: { width: 40, height: 45 },
   },
   carrot: {
-    source: require("../assets/images/Carrot.png"),
+    source: require("../assets/images/ingredients/Carrot.png"),
     style: { width: 28, height: 64, borderRadius: 14 },
   },
   "soy sauce": {
-    source: require("../assets/images/Soy_sauce.png"),
+    source: require("../assets/images/ingredients/Soy_sauce.png"),
     style: { width: 36, height: 64, borderRadius: 24 },
   },
   egg: {
-    source: require("../assets/images/Egg.png"),
+    source: require("../assets/images/ingredients/Egg.png"),
     style: { width: 50, height: 60, borderRadius: 30 },
   },
     "bok choy": {
-    source: require("../assets/images/Bok_choy.png"),
+    source: require("../assets/images/ingredients/Bok_choy.png"),
+    style: { width: 50, height: 60, borderRadius: 30 },
+  },
+    pepper: {
+    source: require("../assets/images/ingredients/Pepper_shaker.png"),
+    style: { width: 50, height: 60, borderRadius: 30 },
+  },
+    salt: {
+    source: require("../assets/images/ingredients/Salt_shaker.png"),
+    style: { width: 50, height: 60, borderRadius: 30 },
+  },
+    watermelon: {
+    source: require("../assets/images/ingredients/Watermelon.png"),
+    style: { width: 50, height: 60, borderRadius: 30 },
+  },
+    potato: {
+    source: require("../assets/images/ingredients/Potato.png"),
+    style: { width: 50, height: 60, borderRadius: 30 },
+  },
+    butter: {
+    source: require("../assets/images/ingredients/Butter.png"),
+    style: { width: 50, height: 60, borderRadius: 30 },
+  },
+    kimchi: {
+    source: require("../assets/images/ingredients/Kimchi.png"),
+    style: { width: 50, height: 60, borderRadius: 30 },
+  },
+    garlic: {
+    source: require("../assets/images/ingredients/Garlic.png"),
     style: { width: 50, height: 60, borderRadius: 30 },
   },
 };
