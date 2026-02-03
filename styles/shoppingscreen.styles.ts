@@ -1,7 +1,7 @@
-  import { StyleSheet } from "react-native";
-  
-  export const styles = StyleSheet.create({
-    /* =========================
+import { StyleSheet } from "react-native";
+
+export const styles = StyleSheet.create({
+  /* =========================
    * LAYOUT / SCREEN
    * ========================= */
   safeArea: {
@@ -10,35 +10,34 @@
   },
   container: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 8,
+    paddingHorizontal: 12,
+    paddingTop: 6,
+    paddingBottom: 10,
   },
 
-    /* =========================
-   * HEADER
+  /* =========================
+   * HEADER (matches recipe screen)
    * ========================= */
   headerRow: {
+    height: 52,
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 8,
-  },
-  iconButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 999,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#ffd9c9",
+    justifyContent: "space-between",
+    paddingHorizontal: 6,
+    marginBottom: 10,
   },
   headerTitle: {
-    flex: 1,
-    textAlign: "center",
-    fontSize: 22,
-    fontWeight: "700",
-    color: "#f2876d",
+    fontSize: 20,
+    fontWeight: "900",
+    color: "#f29f9b",
+    letterSpacing: 0.2,
   },
-  headerRight: {
-    width: 36,
-    alignItems: "flex-end",
+  iconButton: {
+    width: 38,
+    height: 38,
+    borderRadius: 12,
+    backgroundColor: "rgba(255,255,255,0.65)",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

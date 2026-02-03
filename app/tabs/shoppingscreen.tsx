@@ -9,18 +9,22 @@ const ShoppingScreen: FC = () => {
   const router = useRouter();
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={["top"]}>
       <View style={styles.container}>
         {/* HEADER */}
         <View style={styles.headerRow}>
           <TouchableOpacity onPress={() => router.back()} style={styles.iconButton}>
             <Ionicons name="chevron-back" size={24} color="#f29f9b" />
           </TouchableOpacity>
+
           <Text style={styles.headerTitle}>Shopping List</Text>
+
+          {/* Empty spacer to balance the layout */}
+          <View style={styles.iconButton} />
         </View>
       </View>
     </SafeAreaView>  
-    );
+  );
 }
 
 export default ShoppingScreen;
