@@ -42,6 +42,7 @@ type PantryIngredient = {
 ========================================================= */
 const SHOPPING_KEY = "kitchie.shopping.v1";
 const PANTRY_KEY = "kitchie.ingredients.v1";
+const STATS_KEY = "kitchie.stats.v1";
 
 /* =========================================================
    Helpers
@@ -324,6 +325,14 @@ const ShoppingScreen: FC = () => {
       const itemIds = new Set(itemsToBuy.map((i) => i.id));
       setItems((prev) => prev.filter((item) => !itemIds.has(item.id)));
 
+      // Increment ingredients bought stat
+      try {
+        const raw = await AsyncStorage.getItem(STATS_KEY);
+        const stats = raw ? JSON.parse(raw) : { recipesCooked: 0, ingredientsBought: 0 };
+        stats.ingredientsBought = (stats.ingredientsBought || 0) + itemsToBuy.length;
+        await AsyncStorage.setItem(STATS_KEY, JSON.stringify(stats));
+      } catch (_) {}
+
       Alert.alert("Done!", `${itemsToBuy.length} item${itemsToBuy.length > 1 ? 's' : ''} added to your inventory.`);
     } catch (e) {
       console.warn("Failed to buy items", e);
@@ -389,15 +398,15 @@ const ShoppingScreen: FC = () => {
         <View style={styles.headerRow}>
           <TouchableOpacity
             onPress={() => router.back()}
-            style={styles.iconButton}
+            style={styles.backButton}
             activeOpacity={0.8}
           >
-            <Ionicons name="chevron-back" size={24} color="#f29f9b" />
+            <Ionicons name="chevron-back" size={28} color="#f29f9b" />
           </TouchableOpacity>
 
           <Text style={styles.headerTitle}>Shopping List</Text>
 
-          <TouchableOpacity onPress={openAdd} style={styles.iconButton} activeOpacity={0.8}>
+          <TouchableOpacity onPress={openAdd} style={styles.addButton} activeOpacity={0.8}>
             <Ionicons name="add" size={24} color="#f29f9b" />
           </TouchableOpacity>
         </View>

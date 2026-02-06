@@ -10,9 +10,8 @@ export const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingHorizontal: 12,
-    paddingTop: 6,
-    paddingBottom: 10,
+    paddingHorizontal: 16,
+    paddingTop: 8,
   },
 
   /* =========================
@@ -22,9 +21,23 @@ export const styles = StyleSheet.create({
     height: 52,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 6,
-    marginBottom: 10,
+    justifyContent: "center",
+    marginBottom: 16,
+  },
+  backButton: {
+    position: "absolute",
+    left: 0,
+    padding: 4,
+  },
+  addButton: {
+    position: "absolute",
+    right: 0,
+    width: 38,
+    height: 38,
+    borderRadius: 12,
+    backgroundColor: "rgba(255,255,255,0.65)",
+    alignItems: "center",
+    justifyContent: "center",
   },
   iconButton: {
     width: 38,
@@ -35,10 +48,10 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "900",
     color: "#f29f9b",
-    letterSpacing: 0.2,
+    letterSpacing: 0.3,
   },
 
   /* =========================

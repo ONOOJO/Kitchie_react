@@ -19,6 +19,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="stockscreen" options={{ title: "Inventory" }} />
       <Tabs.Screen name="recipescreen" options={{ title: "Recipes" }} />
       <Tabs.Screen name="shoppingscreen" options={{ title: "Shopping" }} />
+      <Tabs.Screen name="profilescreen" options={{ title: "Profile" }} />
     </Tabs>
   );
 }
@@ -105,6 +106,8 @@ function AnimatedTabBar({ state, navigation }: any) {
         return <Ionicons name="restaurant" size={26} color={color} />;
       case "shoppingscreen":
         return <Ionicons name="cart" size={26} color={color} />;
+      case "profilescreen":
+        return <Ionicons name="person" size={26} color={color} />;
       default:
         return null;
     }

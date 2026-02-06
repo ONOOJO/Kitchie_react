@@ -72,6 +72,7 @@ type ShoppingItem = {
 const PANTRY_KEY = "kitchie.ingredients.v1";
 const RECIPES_KEY = "kitchie.recipes.v1";
 const SHOPPING_KEY = "kitchie.shopping.v1";
+const STATS_KEY = "kitchie.stats.v1";
 
 const normalize = (s: string) => s.trim().toLowerCase();
 
@@ -445,6 +446,14 @@ const RecipeScreen: FC = () => {
 
       await AsyncStorage.setItem(PANTRY_KEY, JSON.stringify(nextPantry));
       setPantry(nextPantry);
+
+      // Increment recipes cooked stat
+      try {
+        const raw = await AsyncStorage.getItem(STATS_KEY);
+        const stats = raw ? JSON.parse(raw) : { recipesCooked: 0, ingredientsBought: 0 };
+        stats.recipesCooked = (stats.recipesCooked || 0) + 1;
+        await AsyncStorage.setItem(STATS_KEY, JSON.stringify(stats));
+      } catch (_) {}
 
       Alert.alert("Done!", "Inventory updated ✅");
     } catch (e) {

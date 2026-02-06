@@ -257,15 +257,15 @@ const StockScreen: FC = () => {
         <View style={styles.headerRow}>
           <TouchableOpacity
             onPress={() => router.back()}
-            style={styles.iconButton}
+            style={styles.backButton}
             activeOpacity={0.8}
           >
-            <Ionicons name="chevron-back" size={24} color="#f29f9b" />
+            <Ionicons name="chevron-back" size={28} color="#f29f9b" />
           </TouchableOpacity>
 
           <Text style={styles.headerTitle}>Inventory</Text>
 
-          <TouchableOpacity onPress={openAdd} style={styles.iconButton} activeOpacity={0.8}>
+          <TouchableOpacity onPress={openAdd} style={styles.addButton} activeOpacity={0.8}>
             <Ionicons name="add" size={24} color="#f29f9b" />
           </TouchableOpacity>
         </View>
