@@ -116,7 +116,7 @@ const ProfileScreen: FC = () => {
         <View style={styles.statsRow}>
           <View style={styles.statCard}>
             <View style={styles.statIconWrap}>
-              <Ionicons name="restaurant" size={28} color="#f29f9b" />
+              <Ionicons name="flame" size={28} color="#f29f9b" />
             </View>
             <Text style={styles.statNumber}>{stats.recipesCooked}</Text>
             <Text style={styles.statLabel}>Recipes{"\n"}Cooked</Text>

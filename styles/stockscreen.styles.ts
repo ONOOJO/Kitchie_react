@@ -15,14 +15,14 @@ export const styles = StyleSheet.create({
   },
 
   /* =========================
-  * HEADER (MATCH RECIPESCREEN EXACTLY)
-  * ========================= */
+   * HEADER (MATCH RECIPESCREEN EXACTLY)
+   * ========================= */
   headerRow: {
     height: 52,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 16,
+    marginBottom: 8,
   },
   backButton: {
     position: "absolute",
@@ -60,91 +60,182 @@ export const styles = StyleSheet.create({
   subtitle: {
     fontSize: 14,
     color: "#b7867c",
-    marginBottom: 12,
+    marginBottom: 8,
   },
 
   /* =========================
-   * GRID / LIST
+   * CATEGORY FILTER (horizontal scroll)
+   * ========================= */
+  categoryScroll: {
+    maxHeight: 44,
+    marginBottom: 12,
+  },
+  categoryFilterRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    paddingRight: 16,
+  },
+  categoryChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: "rgba(255,255,255,0.65)",
+    gap: 5,
+  },
+  categoryChipActive: {
+    backgroundColor: "#f29f9b",
+  },
+  categoryChipText: {
+    fontSize: 13,
+    fontWeight: "800",
+    color: "#b7747c",
+  },
+  categoryChipTextActive: {
+    color: "#fff",
+  },
+  categoryCountBadge: {
+    minWidth: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: "rgba(183,116,124,0.15)",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 4,
+  },
+  categoryCountBadgeActive: {
+    backgroundColor: "rgba(255,255,255,0.35)",
+  },
+  categoryCountText: {
+    fontSize: 11,
+    fontWeight: "900",
+    color: "#b7747c",
+  },
+  categoryCountTextActive: {
+    color: "#fff",
+  },
+
+  /* =========================
+   * LIST CONTENT
    * ========================= */
   listContent: {
     paddingVertical: 4,
-  },
-  row: {
-    flex: 1,
-    justifyContent: "space-between",
-    marginBottom: 8,
+    paddingBottom: 20,
   },
 
   /* =========================
-   * INGREDIENT CARD
+   * LIST ITEM CARD (new list view)
    * ========================= */
-  itemCard: {
-    flex: 1,
+  listItemCard: {
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 12,
-    paddingHorizontal: 2,
+    paddingHorizontal: 14,
     backgroundColor: "rgba(255,255,255,0.55)",
-    borderRadius: 25,
+    borderRadius: 16,
     marginBottom: 8,
-    marginHorizontal: 4,
-    justifyContent: "space-between",
   },
-  itemLeftRow: {
+  listItemImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    marginRight: 12,
+  },
+  listItemContent: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  listItemName: {
+    fontSize: 15,
+    fontWeight: "800",
+    color: "#7a4d45",
+    marginBottom: 3,
+  },
+  listItemDetails: {
     flexDirection: "row",
     alignItems: "center",
-    flexShrink: 1,
+    gap: 8,
   },
-  itemImage: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
-    marginRight: 8,
-  },
-  itemRightText: {
-    flexDirection: "column",
-  },
-  itemSub: {
+  listItemQty: {
     fontSize: 13,
     color: "#b7867c",
-    marginTop: 2,
+    fontWeight: "600",
+  },
+  listItemCategoryBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 3,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8,
+    backgroundColor: "rgba(183,116,124,0.08)",
+  },
+  listItemCategoryText: {
+    fontSize: 11,
+    fontWeight: "700",
+    color: "#b7747c",
+  },
+  listItemRight: {
+    alignItems: "flex-end",
+    justifyContent: "center",
+    gap: 4,
+    marginLeft: 8,
   },
 
   /* =========================
-   * MODAL
+   * EXPIRY BADGES
    * ========================= */
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.25)",
-    justifyContent: "center",
+  expiryBadge: {
+    flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 24,
+    gap: 3,
+    paddingHorizontal: 7,
+    paddingVertical: 3,
+    borderRadius: 8,
   },
-  modalCard: {
-    width: "100%",
-    borderRadius: 24,
-    backgroundColor: "#fff7f1",
-    padding: 20,
+  expiryBadgeOk: {
+    backgroundColor: "rgba(85,139,47,0.10)",
   },
-  modalTitle: {
-    fontSize: 18,
+  expiryBadgeSoon: {
+    backgroundColor: "rgba(230,81,0,0.10)",
+  },
+  expiryBadgeExpired: {
+    backgroundColor: "rgba(211,47,47,0.10)",
+  },
+  expiryBadgeText: {
+    fontSize: 11,
     fontWeight: "700",
-    color: "#f2876d",
-    marginBottom: 12,
   },
-  modalLabel: {
-    fontSize: 13,
-    color: "#b7867c",
+  expiryTextOk: {
+    color: "#558b2f",
+  },
+  expiryTextSoon: {
+    color: "#e65100",
+  },
+  expiryTextExpired: {
+    color: "#d32f2f",
+  },
+
+  /* =========================
+   * EMPTY STATE
+   * ========================= */
+  emptyBox: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 60,
+    gap: 8,
+  },
+  emptyTitle: {
+    fontSize: 16,
+    fontWeight: "800",
+    color: "#c9a09a",
     marginTop: 8,
-    marginBottom: 4,
   },
-  input: {
-    borderRadius: 14,
-    backgroundColor: "#ffe6d5",
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    fontSize: 14,
-    color: "#7a4d45",
+  emptySub: {
+    fontSize: 13,
+    color: "#d4b5b0",
   },
 
   /* =========================
@@ -159,8 +250,8 @@ export const styles = StyleSheet.create({
     position: "absolute",
     left: 12,
     right: 12,
-    top: 120,
-    maxHeight: "70%",
+    top: 100,
+    maxHeight: "75%",
     borderRadius: 18,
     backgroundColor: "#ffe9dc",
     padding: 14,
@@ -199,6 +290,64 @@ export const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,0.75)",
     color: "#b7747c",
     fontWeight: "800",
+  },
+
+  /* =========================
+   * INPUT ROW (Quantity + Unit side by side)
+   * ========================= */
+  inputRow: {
+    flexDirection: "row",
+    gap: 10,
+  },
+  inputRowItem: {
+    flex: 1,
+  },
+  inputRowItemSmall: {
+    width: 90,
+  },
+
+  /* =========================
+   * CATEGORY PICKER (in modal)
+   * ========================= */
+  categoryPickerRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+  },
+  categoryPick: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderRadius: 14,
+    backgroundColor: "rgba(255,255,255,0.65)",
+  },
+  categoryPickActive: {
+    backgroundColor: "#f29f9b",
+  },
+  categoryPickText: {
+    fontSize: 12,
+    fontWeight: "800",
+    color: "#b7747c",
+  },
+  categoryPickTextActive: {
+    color: "#fff",
+  },
+
+  /* =========================
+   * EXPIRY DATE INPUT
+   * ========================= */
+  expiryInputRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  errorText: {
+    fontSize: 12,
+    color: "#d32f2f",
+    fontWeight: "700",
+    marginTop: 4,
+    marginLeft: 4,
   },
 
   /* =========================
@@ -258,7 +407,7 @@ export const styles = StyleSheet.create({
     fontWeight: "900",
   },
   modalButtonPrimaryText: {
-    color: "#ffe9dc",
+    color: "#fffffffa",
     fontWeight: "900",
   },
   modalButtonDangerText: {

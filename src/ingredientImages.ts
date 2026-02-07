@@ -66,6 +66,30 @@ const ingredientAssets: Record<string, IngredientAsset> = {
     source: require("../assets/images/ingredients/Garlic.png"),
     style: { width: 50, height: 60, borderRadius: 30 },
   },
+    "spring onion": {
+    source: require("../assets/images/ingredients/Spring_onion.png"),
+    style: { width: 50, height: 60, borderRadius: 30 },
+  },
+    onion: {
+    source: require("../assets/images/ingredients/Onion.png"),
+    style: { width: 50, height: 60, borderRadius: 30 },
+  },
+    chicken: {
+    source: require("../assets/images/ingredients/Chicken_drumstick.png"),
+    style: { width: 50, height: 60, borderRadius: 30 },
+  },
+    pork: {
+    source: require("../assets/images/ingredients/Pork_belly.png"),
+    style: { width: 50, height: 60, borderRadius: 30 },
+  },
+    tofu: {
+    source: require("../assets/images/ingredients/Tofu.png"),
+    style: { width: 50, height: 60, borderRadius: 30 },
+  },
+    vinegar: {
+    source: require("../assets/images/ingredients/Vinegar.png"),
+    style: { width: 50, height: 60, borderRadius: 30 },
+  },
 };
 
 export function normalizeIngredientName(name: string) {
